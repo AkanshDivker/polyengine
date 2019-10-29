@@ -5,6 +5,7 @@ __pycache__/
 
 # Other
 .vs
+.vscode
 .DS_Store
 
 # C extensions
