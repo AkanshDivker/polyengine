@@ -25,7 +25,7 @@ I'm always happy to help out and teach others. If you have any questions or comm
 
 * **Akansh Divker** - *Project contributor* - [AkanshDivker](https://github.com/AkanshDivker)
 * **Dong Song Kim** - *Project contributor* - [Ramanu-fkwmxor](https://github.com/Ramanu-fkwmxor)
-* **Duc** - *Project contributor* - [ducnowitzki](https://github.com/ducnowitzki)
+* **Minh Duc Nguyen** - *Project contributor* - [ducnowitzki](https://github.com/ducnowitzki)
 * **Seo Yeon Hwang** - *Project contributor* - [hsy00](https://github.com/hsy00)
 * **Hyeon Jong Park** - *Project contributor* - [diydriller](https://github.com/diydriller)
 
