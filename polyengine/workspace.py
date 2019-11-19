@@ -15,7 +15,7 @@ class Workspace:
 
     def __init__(self, path: str):
         self.path = path
-        # self.verify()
+        #self.verify()
 
     def verify(self):
         if (len(self.path) is not os.path.isdir(self.path)):

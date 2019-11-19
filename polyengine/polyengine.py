@@ -7,27 +7,54 @@
 
 import sys
 import shutil
-from compile import Compile
+import binascii
 from workspace import Workspace
 from cleanup import Cleanup
+from util.encryption import Encryption
+from util.compile import Compile
+from util.config import Config
+
+
+class PolyEngine:
+    def start(self):
+        # Script statup steps
+        print('PolyEngine v1.0\n')
+        config = Config('config.ini')
+
+        project_name = config.check_setting('PolyEngine', 'Name')
+        print('Starting project ' + project_name)
+
+        message = config.check_setting('PolyEngine', 'Message')
+        print(message)
+
+        # Test encryption
+        encrypt = Encryption("pass")
+
+        encrypt.encrypt('test')
+
+        # Source directory of project based on config file
+        source_directory = config.check_setting('Compile', 'SourceDirectory')
+
+        # Create the temporary code modification workspace
+        workspace = Workspace(source_directory)
+        workspace.create_workspace()
+
+        compiler_setting = config.check_setting('Compile', 'Compiler')
+        output_file = config.check_setting('Compile', 'Output')
+        commands = config.check_setting('Compile', 'Commands')
+
+        # Initialize the compiler once information has been loaded
+        compiler = Compile(
+            compiler_setting, workspace.source_files, commands, output_file)
+        compiler.compile()
+
+        # Cleanup workspace and exit
+        Cleanup.clean_exit(workspace.work_path)
 
 
 def main():
-    print('PolyEngine v1.0\n')
-
-    # Temporary definition for test C project to compile
-    source_directory = '../tests/c_project/'
-
-    # Create the temporary code modification workspace
-    workspace = Workspace(source_directory)
-    workspace.create_workspace()
-
-    # Initialize the compiler once information has been loaded
-    compiler = Compile('gcc', workspace.source_files, 'c_program')
-    compiler.compile()
-
-    # Cleanup workspace and exit
-    Cleanup.clean_exit(workspace.work_path)
+    poly_engine = PolyEngine()
+    poly_engine.start()
 
 
 if __name__ == '__main__':

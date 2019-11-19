@@ -8,20 +8,21 @@ import logging
 
 
 class Compile:
-    def __init__(self, compiler: str, source_files: list, outfile: str):
+    def __init__(self, compiler: str, source_files: list, commands: str, outfile: str):
         self.compiler = compiler
         self.source_files = source_files
         self.outfile = outfile
+        self.commands = commands
 
     def compile(self):
         source_list = './temp/'.join(self.source_files)
 
         print('Starting project compile.')
 
-        if os.system(self.compiler + ' ' + source_list + ' -o ' + self.outfile) == 0:
+        if os.system('g++' + ' ' + source_list + ' ' + self.commands + ' ' + self.outfile) == 0:
             print('Project compile finished successfully.')
             print('Running compiled binary ' + self.outfile)
-            print('------------------------------' + '\n\n')
+            print('------------------------------' + '\n')
 
             os.system('./' + self.outfile)
         else:
