@@ -6,7 +6,6 @@ import sys
 import os
 import logging
 
-
 class Compile:
     def __init__(self, compiler: str, source_files: list, commands: str, outfile: str):
         self.compiler = compiler
@@ -16,7 +15,6 @@ class Compile:
 
     def compile(self):
         source_list = './temp/'.join(self.source_files)
-
         print('Starting project compile.')
 
         if os.system('g++' + ' ' + source_list + ' ' + self.commands + ' ' + self.outfile) == 0:

@@ -5,6 +5,9 @@
 import sys
 import re
 import switch_start as ss
+import struct as st_change
+# string part
+# import stringencryption as ec
 
 class Processing:
     def __init__(self, file: str):
@@ -20,6 +23,8 @@ class Processing:
         struct_end = '[/order_variable]'
         switch_start = re.compile('case.*:$')
         junk_start = '[/junk]'
+        n_string = re.compile('^#')
+        y_string = re.compile('".*"')
 
         # Preprocessing
         line_process = [word.rstrip() for word in line]
@@ -30,6 +35,7 @@ class Processing:
         struct_end_index = []
         switch_index = []
         junk_index = []
+        string_index = []
 
         for idx in range(len(line_process)):
             m = switch_start.search(line_process[idx])
@@ -41,13 +47,20 @@ class Processing:
                 switch_index.append(idx)
             elif line_process[idx] == junk_start:
                 junk_index.append(idx)
+            elif n_s == None and y_s != None:
+                string_index.append(idx)
+
         index_list = {'struct_start_index':struct_start_index, 'struct_end_index':struct_end_index, 'switch_index':switch_index, 'junk_index':junk_index}
 
         # Check tags and print error
         if len(struct_start_index) != len(struct_end_index):
             print("There is no '[order_variable]' or '[/order_variable]'. Please check your code.")
             sys.exit()
-
+        
+        # Change variables
+        order = st_change.Struct(struct_start_index, struct_end_index, line_process)
+		order.struct_change()
+        
         # Remove tags and rewrite file
         for idx in struct_start_index:
             line_process[idx] = ''
@@ -58,10 +71,15 @@ class Processing:
             line_process[idx] = tmp.insert_switch(line_process[idx])
         for idx in junk_index:
             line_process[idx] = ''
+        for idx in string_index:
+            tmp = y_string.search(line_process[idx])
+            var1 = "asdf"
+            line_process[idx] = line_process[idx][:tmp.start()-1] + " decrypt(\""+ var1 + "\") " + line_process[idx][tmp.end()+1:]
 
+        # Rewrite file
+        initialize_include = 'You_can_push_include_:)'
         file = open(self.file, 'w')
+        file.write(initialize_include)
         for text in line_process:
             file.write(text + '\n')
         file.close()
-
-        return index_list
