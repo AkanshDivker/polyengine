@@ -13,7 +13,7 @@ from cleanup import Cleanup
 from util.encryption import Encryption
 from util.compile import Compile
 from util.config import Config
-
+from processing import Processing
 
 class PolyEngine:
     def start(self):
@@ -27,14 +27,9 @@ class PolyEngine:
         message = config.check_setting('PolyEngine', 'Message')
         print(message)
 
-        # Test encryption
-        encrypt = Encryption('pass:test')
-
-        encrypted = encrypt.encrypt('teststring123test')
-        print(encrypt.to_byte_string(encrypted))
-
-        encrypted_test = encrypt.encrypt('anotherone')
-        print(encrypted_test)
+        # Test processing
+        p = Processing('../tests/c_project/c_program.c')
+        p.processing()
 
         # Source directory of project based on config file
         source_directory = config.check_setting('Compile', 'SourceDirectory')

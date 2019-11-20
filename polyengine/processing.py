@@ -86,10 +86,10 @@ class Processing:
             encrypted_bytes = self.encryption.to_byte_string(encrypted_string)
 
             line_process[idx] = line_process[idx][:tmp.start(
-            )-1] + " decrypt(\"" + encrypted_bytes + "\") " + line_process[idx][tmp.end()+1:]
+            )] + " decrypt(\"" + encrypted_bytes + "\") " + line_process[idx][tmp.end():]
 
         # Rewrite file
-        initialize_include = 'You_can_push_include_:)'
+        initialize_include = '#include \"PolyEngine.h\"\n'
         file = open(self.file, 'w')
         file.write(initialize_include)
         for text in line_process:
