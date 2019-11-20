@@ -6,7 +6,7 @@ import sys
 import re
 import junk as j
 import switch_start as ss
-import struct as st_change
+import struct_order as st_change
 # string part
 from util.encryption import Encryption
 
@@ -65,7 +65,7 @@ class Processing:
             sys.exit()
 
         # Change variables
-        order = st_change.Struct(
+        order = st_change.Struct_order(
             struct_start_index, struct_end_index, line_process)
         order.struct_change()
 
