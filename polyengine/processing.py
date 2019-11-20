@@ -6,7 +6,7 @@ import sys
 import re
 import junk as j
 import switch_start as ss
-import struct_change as st_change
+import struct_order as st_change
 # string part
 from util.encryption import Encryption
 
