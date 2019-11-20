@@ -4,6 +4,7 @@
 
 import sys
 import re
+import junk as j
 import switch_start as ss
 import struct as st_change
 # string part
@@ -77,7 +78,8 @@ class Processing:
             tmp = ss.Switch_Start(line_process[idx])
             line_process[idx] = tmp.insert_switch(line_process[idx])
         for idx in junk_index:
-            line_process[idx] = ''
+            tmp = j.Junk()
+            line_process[idx] = tmp.generate_random_junk_code()
         for idx in string_index:
             tmp = y_string.search(line_process[idx])
             tmp2 = line_process[idx][tmp.start():tmp.end()]
