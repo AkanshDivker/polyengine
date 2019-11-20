@@ -21,8 +21,9 @@ class Encryption:
         self.create_temp_file(plaintext)
 
         # Use OpenSSL command line to encrypt string
-        encrypted_bytes = subprocess.check_output(['openssl', 'enc', '-aes-256-cbc', '-in', self.temp_file, '-base64', '-md', 'sha1', '-pass', self.password ])
-        
+        encrypted_bytes = subprocess.check_output(
+            ['openssl', 'enc', '-aes-256-cbc', '-in', self.temp_file, '-base64', '-md', 'sha1', '-pass', self.password])
+
         # Decode the bytes into a string
         #encrypted = encrypted_bytes.decode('utf-8')
 

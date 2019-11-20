@@ -35,7 +35,7 @@ class PolyEngine:
 
         encrypted_test = encrypt.encrypt('anotherone')
         print(encrypted_test)
-        
+
         # Source directory of project based on config file
         source_directory = config.check_setting('Compile', 'SourceDirectory')
 

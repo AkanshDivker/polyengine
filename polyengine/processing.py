@@ -9,6 +9,7 @@ import struct as st_change
 # string part
 from util.encryption import Encryption
 
+
 class Processing:
     def __init__(self, file: str):
         self.file = file
@@ -40,28 +41,33 @@ class Processing:
 
         for idx in range(len(line_process)):
             m = switch_start.search(line_process[idx])
+            n_s = n_string.search(line_process[idx])
+            y_s = y_string.search(line_process[idx])
             if line_process[idx] == struct_start:
                 struct_start_index.append(idx)
             elif line_process[idx] == struct_end:
                 struct_end_index.append(idx)
-            elif  m != None:
+            elif m != None:
                 switch_index.append(idx)
             elif line_process[idx] == junk_start:
                 junk_index.append(idx)
             elif n_s == None and y_s != None:
                 string_index.append(idx)
 
-        index_list = {'struct_start_index':struct_start_index, 'struct_end_index':struct_end_index, 'switch_index':switch_index, 'junk_index':junk_index}
+        index_list = {'struct_start_index': struct_start_index, 'struct_end_index': struct_end_index,
+                      'switch_index': switch_index, 'junk_index': junk_index}
 
         # Check tags and print error
         if len(struct_start_index) != len(struct_end_index):
-            print("There is no '[order_variable]' or '[/order_variable]'. Please check your code.")
+            print(
+                "There is no '[order_variable]' or '[/order_variable]'. Please check your code.")
             sys.exit()
-        
+
         # Change variables
-        order = st_change.Struct(struct_start_index, struct_end_index, line_process)
-		order.struct_change()
-        
+        order = st_change.Struct(
+            struct_start_index, struct_end_index, line_process)
+        order.struct_change()
+
         # Remove tags and rewrite file
         for idx in struct_start_index:
             line_process[idx] = ''
@@ -75,11 +81,12 @@ class Processing:
         for idx in string_index:
             tmp = y_string.search(line_process[idx])
             tmp2 = line_process[idx][tmp.start():tmp.end()]
-            
+
             encrypted_string = self.encryption.encrypt(tmp2.strip('"'))
             encrypted_bytes = self.encryption.to_byte_string(encrypted_string)
 
-            line_process[idx] = line_process[idx][:tmp.start()-1] + " decrypt(\""+ encrypted_bytes + "\") " + line_process[idx][tmp.end()+1:]
+            line_process[idx] = line_process[idx][:tmp.start(
+            )-1] + " decrypt(\"" + encrypted_bytes + "\") " + line_process[idx][tmp.end()+1:]
 
         # Rewrite file
         initialize_include = 'You_can_push_include_:)'
