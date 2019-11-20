@@ -76,7 +76,7 @@ class Processing:
             tmp = y_string.search(line_process[idx])
             tmp2 = line_process[idx][tmp.start():tmp.end()]
             
-            encrypted_string = self.encryption.encrypt(tmp2)
+            encrypted_string = self.encryption.encrypt(tmp2.strip('"'))
             encrypted_bytes = self.encryption.to_byte_string(encrypted_string)
 
             line_process[idx] = line_process[idx][:tmp.start()-1] + " decrypt(\""+ encrypted_bytes + "\") " + line_process[idx][tmp.end()+1:]
