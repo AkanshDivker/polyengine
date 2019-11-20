@@ -8,6 +8,7 @@
 import sys
 import shutil
 import binascii
+from loguru import logger as logger
 from workspace import Workspace
 from cleanup import Cleanup
 from util.encryption import Encryption
@@ -15,21 +16,18 @@ from util.compile import Compile
 from util.config import Config
 from processing import Processing
 
+
 class PolyEngine:
     def start(self):
         # Script statup steps
-        print('PolyEngine v1.0\n')
+        logger.info('PolyEngine v1.0')
         config = Config('config.ini')
 
         project_name = config.check_setting('PolyEngine', 'Name')
-        print('Starting project ' + project_name)
+        logger.info('Starting project {}', project_name)
 
         message = config.check_setting('PolyEngine', 'Message')
-        print(message)
-
-        # Test processing
-        p = Processing('../tests/c_project/c_program.c')
-        p.processing()
+        logger.info(message)
 
         # Source directory of project based on config file
         source_directory = config.check_setting('Compile', 'SourceDirectory')
@@ -38,10 +36,21 @@ class PolyEngine:
         workspace = Workspace(source_directory)
         workspace.create_workspace()
 
+        # Process the files
+        for f in workspace.source_files:
+            if f is not None:
+                processor = Processing(f)
+                processor.process()
+
+        for f in workspace.header_files:
+            if f is not None:
+                processor = Processing(f)
+                processor.process()
+
+        # Initialize the compiler once information has been loaded
         output_file = config.check_setting('Compile', 'Output')
         commands = config.check_setting('Compile', 'Commands')
 
-        # Initialize the compiler once information has been loaded
         compiler = Compile(workspace.source_files, commands, output_file)
         compiler.compile()
 

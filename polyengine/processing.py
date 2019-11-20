@@ -6,7 +6,7 @@ import sys
 import re
 import junk as j
 import switch_start as ss
-import struct as st_change
+import struct_change as st_change
 # string part
 from util.encryption import Encryption
 
@@ -16,7 +16,7 @@ class Processing:
         self.file = file
         self.encryption = Encryption('pass:testpass')
 
-    def processing(self):
+    def process(self):
         files = open(self.file)
         line = files.readlines()
         files.close()
@@ -80,18 +80,18 @@ class Processing:
         for idx in junk_index:
             tmp = j.Junk()
             line_process[idx] = tmp.generate_random_junk_code()
-        for idx in string_index:
-            tmp = y_string.search(line_process[idx])
-            tmp2 = line_process[idx][tmp.start():tmp.end()]
+        #for idx in string_index:
+        #    tmp = y_string.search(line_process[idx])
+        #    tmp2 = line_process[idx][tmp.start():tmp.end()]
 
-            encrypted_string = self.encryption.encrypt(tmp2.strip('"'))
-            encrypted_bytes = self.encryption.to_byte_string(encrypted_string)
+        #    encrypted_string = self.encryption.encrypt(tmp2.strip('"'))
+        #    encrypted_bytes = self.encryption.to_byte_string(encrypted_string)
 
-            line_process[idx] = line_process[idx][:tmp.start(
-            )] + " decrypt(\"" + encrypted_bytes + "\") " + line_process[idx][tmp.end():]
+        #    line_process[idx] = line_process[idx][:tmp.start(
+        #    )] + " decrypt(\"" + encrypted_bytes + "\") " + line_process[idx][tmp.end():]
 
         # Rewrite file
-        initialize_include = '#include \"PolyEngine.h\"\n'
+        initialize_include = ''#'#include \"PolyEngine.h\"\n'
         file = open(self.file, 'w')
         file.write(initialize_include)
         for text in line_process:

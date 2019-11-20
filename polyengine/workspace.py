@@ -5,7 +5,7 @@
 import sys
 import os
 import shutil
-import logging
+from loguru import logger as logger
 
 
 class Workspace:
@@ -19,8 +19,8 @@ class Workspace:
 
     def verify(self):
         if (len(self.path) is not os.path.isdir(self.path)):
-            logging.error(self.path)
-            logging.error('Invalid directory path entered.')
+            logger.error(self.path)
+            logger.error('Invalid directory path entered.')
             sys.exit("Invalid path.")
 
     def create_workspace(self):

@@ -2,14 +2,18 @@
 # Class to utilize the cryptography library and produce encrypted values
 # Authors: Akansh Divker
 
-import os
-import subprocess
+from hashlib import md5
+from base64 import b64encode
+from base64 import b64decode
+
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
 
 
 class Encryption:
-    def __init__(self, password: str):
-        self.password = password
-        self.temp_file = 'temp_str.txt'
+    def __init__(self, key: str):
+        self.key = md5(key.encode('utf-8')).digest()
 
     def create_temp_file(self, plaintext: str):
         f = open('temp_str.txt', 'w+')
@@ -17,17 +21,9 @@ class Encryption:
         f.close()
 
     def encrypt(self, plaintext: str) -> bytes:
-        # Create temporary text file containing string to encrypt
-        self.create_temp_file(plaintext)
-
-        # Use OpenSSL command line to encrypt string
-        encrypted_bytes = subprocess.check_output(
-            ['openssl', 'enc', '-aes-256-cbc', '-in', self.temp_file, '-base64', '-md', 'sha1', '-pass', self.password])
-
-        # Decode the bytes into a string
-        #encrypted = encrypted_bytes.decode('utf-8')
-
-        return encrypted_bytes
+        iv = get_random_bytes(AES.block_size)
+        cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        return b64encode(iv + cipher.encrypt(pad(plaintext.encode('utf-8'), AES.block_size)))
 
     def to_byte_string(self, convert) -> str:
         return ''.join(['\\'+hex(b)[1:] for b in convert])
