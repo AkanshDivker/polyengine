@@ -65,7 +65,7 @@ class Processing:
             sys.exit()
 
         # Change variables
-        order = st_change.Struct(
+        order = st_change.Struct_order(
             struct_start_index, struct_end_index, line_process)
         order.struct_change()
 
