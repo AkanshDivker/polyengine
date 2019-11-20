@@ -7,11 +7,12 @@ import re
 import switch_start as ss
 import struct as st_change
 # string part
-# import stringencryption as ec
+from util.encryption import Encryption
 
 class Processing:
     def __init__(self, file: str):
         self.file = file
+        self.encryption = Encryption('pass:testpass')
 
     def processing(self):
         files = open(self.file)
@@ -73,8 +74,12 @@ class Processing:
             line_process[idx] = ''
         for idx in string_index:
             tmp = y_string.search(line_process[idx])
-            var1 = "asdf"
-            line_process[idx] = line_process[idx][:tmp.start()-1] + " decrypt(\""+ var1 + "\") " + line_process[idx][tmp.end()+1:]
+            tmp2 = line_process[idx][tmp.start():tmp.end()]
+            
+            encrypted_string = self.encryption.encrypt(tmp2)
+            encrypted_bytes = self.encryption.to_byte_string(encrypted_string)
+
+            line_process[idx] = line_process[idx][:tmp.start()-1] + " decrypt(\""+ encrypted_bytes + "\") " + line_process[idx][tmp.end()+1:]
 
         # Rewrite file
         initialize_include = 'You_can_push_include_:)'

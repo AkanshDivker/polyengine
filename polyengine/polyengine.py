@@ -28,10 +28,14 @@ class PolyEngine:
         print(message)
 
         # Test encryption
-        encrypt = Encryption("pass")
+        encrypt = Encryption('pass:test')
 
-        encrypt.encrypt('test')
+        encrypted = encrypt.encrypt('teststring123test')
+        print(encrypt.to_byte_string(encrypted))
 
+        encrypted_test = encrypt.encrypt('anotherone')
+        print(encrypted_test)
+        
         # Source directory of project based on config file
         source_directory = config.check_setting('Compile', 'SourceDirectory')
 
@@ -39,13 +43,11 @@ class PolyEngine:
         workspace = Workspace(source_directory)
         workspace.create_workspace()
 
-        compiler_setting = config.check_setting('Compile', 'Compiler')
         output_file = config.check_setting('Compile', 'Output')
         commands = config.check_setting('Compile', 'Commands')
 
         # Initialize the compiler once information has been loaded
-        compiler = Compile(
-            compiler_setting, workspace.source_files, commands, output_file)
+        compiler = Compile(workspace.source_files, commands, output_file)
         compiler.compile()
 
         # Cleanup workspace and exit
