@@ -52,7 +52,7 @@ class PolyEngine:
         commands = config.check_setting('Compile', 'Commands')
         compiler_option = config.check_setting('Compile', 'Compiler').strip("'")
         compiler_option = compiler_option.strip('"')
-        
+
         if compiler_option == 'gcc' or compiler_option == 'g++':
             compiler = Compile(compiler_option, workspace.source_files, commands, output_file)
             compiler.compile()
@@ -61,6 +61,7 @@ class PolyEngine:
             exit('Invalid compiler.')
 
         # Cleanup workspace and exit
+        print()
         Cleanup.clean_exit(workspace.work_path)
 
 
