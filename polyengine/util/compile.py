@@ -7,7 +7,8 @@ import os
 from loguru import logger as logger
 
 class Compile:
-    def __init__(self, source_files: list, commands: str, outfile: str):
+    def __init__(self, compiler: str, source_files: list, commands: str, outfile: str):
+        self.compiler = compiler
         self.source_files = source_files
         self.outfile = outfile
         self.commands = commands
@@ -17,7 +18,7 @@ class Compile:
         
         logger.info('Starting project compile.')
 
-        if os.system('gcc' + ' ' + source_list + ' ' + self.commands + ' ' + self.outfile) == 0:
+        if os.system(self.compiler + ' ' + source_list + ' ' + self.commands + ' ' + self.outfile) == 0:
             logger.info('Project compile finished successfully.')
             logger.info('Running compiled binary {}', self.outfile)
             logger.info('\n')

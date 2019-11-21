@@ -4,7 +4,7 @@
 
 import random
 
-class Struct:
+class Struct_order:
 	def __init__(self, start_index: list, end_index, source: list):
 		self.start_index = start_index
 		self.end_index = end_index
