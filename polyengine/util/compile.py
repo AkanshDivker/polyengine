@@ -5,6 +5,7 @@
 import sys
 import os
 from loguru import logger as logger
+import config
 
 class Compile:
     def __init__(self, compiler: str, source_files: list, commands: str, outfile: str):
@@ -18,7 +19,10 @@ class Compile:
         
         logger.info('Starting project compile.')
 
-        if os.system(self.compiler + ' ' + source_list + ' ' + self.commands + ' ' + self.outfile) == 0:
+        check = config()
+        change_filename = check.remove_sc(self.outfile)
+
+        if os.system(self.compiler + ' ' + source_list + ' ' + self.commands + ' ' + change_filename) == 0:
             logger.info('Project compile finished successfully.')
             logger.info('Running compiled binary {}', self.outfile)
             logger.info('\n')
