@@ -7,14 +7,13 @@ import re
 import junk as j
 import switch_start as ss
 import struct_order as st_change
-# string part
 from util.encryption import Encryption
 
 
 class Processing:
     def __init__(self, file: str):
         self.file = file
-        self.key = 'test'
+        self.encryption = Encryption()
 
     def process(self):
         files = open(self.file)
@@ -85,24 +84,18 @@ class Processing:
             tmp2 = line_process[idx][tmp.start():tmp.end()]
 
             tmp2 = tmp2.strip('"')
-            encryption = Encryption(self.key)
-            encrypted_string = encryption.encrypt(tmp2)
-            byte_string = encryption.to_byte_string(
+            
+            encrypted_string = self.encryption.encrypt(tmp2)
+            byte_string = self.encryption.to_byte_string(
                 encrypted_string.encode('utf-8'))
             
-            print(tmp2)
-            print(encrypted_string)
-            print(encryption.encrypt(encrypted_string))
-            print(byte_string)
-
             line_process[idx] = line_process[idx][:tmp.start(
-            )] + " PolyEngine::Decrypt(\"" + byte_string + "\") " + line_process[idx][tmp.end():]
-            #print(line_process[idx])
+            )] + " PolyEngine::Decrypt(\"" + byte_string + "\", POLY_ENGINE_KEY) " + line_process[idx][tmp.end():]
 
+        
         # Rewrite file
         initialize_include = '#include "PolyEngine.h"\n#define POLY_ENGINE_KEY ' + \
-            '"' + self.key + '"\n'
-        #initialize_include = ''
+            '"' + self.encryption.key + '"\n'
 
         file = open(self.file, 'w')
         file.write(initialize_include)

@@ -1,9 +1,7 @@
 # compile.py
 # Class to handle the compile process for C/C++ source files
 # Authors: Minh Duc Nguyen, Akansh Divker
-
 import sys
-import os
 import subprocess
 from loguru import logger as logger
 

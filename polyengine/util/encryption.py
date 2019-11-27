@@ -2,18 +2,28 @@
 # Class to utilize the cryptography library and produce encrypted values
 # Authors: Akansh Divker
 
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
+import string
+import random
+from Crypto.Hash import SHA256
 
 
 class Encryption:
-    def __init__(self, key: str):
-        self.key = key
+    def __init__(self):
+        letters = string.ascii_lowercase
+        key = ''.join(random.choice(letters) for i in range(16))
+
+        hash_object = SHA256.new(data=key.encode('utf-8'))
+        self.key = hash_object.hexdigest()
 
     def encrypt(self, plaintext: str) -> str:
-        key = get_random_bytes(16)
-        cipher = AES.new(key, AES.MODE_EAX)
-        ciphertext, tag = cipher.encrypt_and_digest(data)
+        ciphertext = ""
+
+        for i in range(len(plaintext)):
+            current = plaintext[i]
+            current_key = self.key[i%len(self.key)]
+            ciphertext += chr(ord(current) ^ ord(current_key))
+
+        return ciphertext
 
 
     def to_byte_string(self, convert) -> str:

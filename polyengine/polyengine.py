@@ -11,7 +11,6 @@ import binascii
 from loguru import logger as logger
 from workspace import Workspace
 from cleanup import Cleanup
-from util.encryption import Encryption
 from util.compile import Compile
 from util.config import Config
 from processing import Processing
