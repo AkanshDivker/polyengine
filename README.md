@@ -19,6 +19,8 @@ You can get started by cloning the repository on your desktop. The code should b
 
 This project requires Python 3.7 to be installed. Please ensure the required modules in `requirements.txt` are installed.
 
+Primary test environment was Mac OS. However, compatibility should be for all systems.
+
 ### Usage
 In order to use the module, cd into the `polyengine` directory and simply start the script by calling `python polyengine.py` in your terminal. Please ensure the required settings listed in `config.ini` are setup and verified. PolyEngine will operate in that directory and use the settings specified in the configuration file.
 
