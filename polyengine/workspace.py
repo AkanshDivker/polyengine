@@ -6,7 +6,7 @@ import sys
 import os
 import shutil
 from loguru import logger as logger
-
+from util.config import Config
 
 class Workspace:
     header_files = list()
@@ -28,10 +28,13 @@ class Workspace:
         files = os.listdir(self.path)
 
         for file in files:
+            file = Config.remove_special_chars(file)
+
             current_path = os.path.join(self.path, file)
             shutil.copy(current_path, self.work_path)
 
             if (file.endswith('.h') or file.endswith('.hpp')):
-                self.header_files.append(self.work_path + file)
+                if file != 'PolyEngine.h':
+                    self.header_files.append(self.work_path + file)
             elif file.endswith('.c') or file.endswith('.cpp'):
                 self.source_files.append(self.work_path + file)

@@ -4,6 +4,7 @@
 
 import sys
 import os
+import subprocess
 from loguru import logger as logger
 
 class Compile:
@@ -18,12 +19,9 @@ class Compile:
         
         logger.info('Starting project compile.')
 
-        if os.system(self.compiler + ' ' + source_list + ' ' + self.commands + ' ' + self.outfile) == 0:
+        if subprocess.call([self.compiler, source_list, self.commands, self.outfile]) == 0:
             logger.info('Project compile finished successfully.')
-            logger.info('Running compiled binary {}', self.outfile)
-            logger.info('\n')
-
-            os.system('./' + self.outfile)
+            logger.info('Output file {} saved in directory.', self.outfile)
         else:
             logger.error("Project compile failed.")
             sys.exit("Failed to compile project.")

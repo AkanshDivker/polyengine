@@ -50,11 +50,11 @@ class PolyEngine:
         # Initialize the compiler once information has been loaded
         output_file = config.check_setting('Compile', 'Output')
         commands = config.check_setting('Compile', 'Commands')
-        compiler_option = config.check_setting('Compile', 'Compiler').strip("'")
-        compiler_option = compiler_option.strip('"')
+        compiler_option = config.check_setting('Compile', 'Compiler')
 
         if compiler_option == 'gcc' or compiler_option == 'g++':
-            compiler = Compile(compiler_option, workspace.source_files, commands, output_file)
+            compiler = Compile(
+                compiler_option, workspace.source_files, commands, output_file)
             compiler.compile()
         else:
             logger.error('Invalid compiler option selected.')
