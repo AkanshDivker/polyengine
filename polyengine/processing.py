@@ -7,14 +7,13 @@ import re
 import junk as j
 import switch_start as ss
 import struct_order as st_change
-# string part
 from util.encryption import Encryption
 
 
 class Processing:
     def __init__(self, file: str):
         self.file = file
-        self.encryption = Encryption('pass:testpass')
+        self.encryption = Encryption()
 
     def process(self):
         files = open(self.file)
@@ -84,15 +83,20 @@ class Processing:
             tmp = y_string.search(line_process[idx])
             tmp2 = line_process[idx][tmp.start():tmp.end()]
 
-            # self.encryption.encrypt(tmp2.strip('"'))
-            encrypted_string = tmp2.strip('"')
-            encrypted_bytes = self.encryption.to_byte_string(str.encode(encrypted_string))
-
+            tmp2 = tmp2.strip('"')
+            
+            encrypted_string = self.encryption.encrypt(tmp2)
+            byte_string = self.encryption.to_byte_string(
+                encrypted_string.encode('utf-8'))
+            
             line_process[idx] = line_process[idx][:tmp.start(
-            )] + " \"" + encrypted_bytes + "\" " + line_process[idx][tmp.end():]
+            )] + " PolyEngine::Decrypt(\"" + byte_string + "\", POLY_ENGINE_KEY) " + line_process[idx][tmp.end():]
 
+        
         # Rewrite file
-        initialize_include = ''  # '#include \"PolyEngine.h\"\n'
+        initialize_include = '#include "PolyEngine.h"\n#define POLY_ENGINE_KEY ' + \
+            '"' + self.encryption.key + '"\n'
+
         file = open(self.file, 'w')
         file.write(initialize_include)
         for text in line_process:

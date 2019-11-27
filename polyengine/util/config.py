@@ -1,6 +1,7 @@
 import configparser
 import re
 import sys
+from loguru import logger as logger
 
 
 class Config:
@@ -11,12 +12,20 @@ class Config:
         config = configparser.ConfigParser()
         config.read(self.config_file)
 
-        return config[category][option].strip('"')
+        selected = config[category][option]
+        selected = selected.replace('"', '')
+        selected = selected.replace("'", '')
+
+        return selected
 
     # Remove special characters and return remainders
-    def remove_sc(self, file_name: str):
-        name_list = re.findall(u"[a-zA-Z0-9_+ ]", file_name)
+    @staticmethod
+    def remove_special_chars(file_name: str) -> str:
+        name_list = re.findall(u"[a-zA-Z0-9_+ .]", file_name)
         name_list = ''.join(name_list)
+
         if len(name_list) > 20:
-            sys.exit()
-        return name_list
+            logger.error("Invalid file name detected.")
+            sys.exit("Invalid file name processed.")
+
+        return name_list.strip('.')

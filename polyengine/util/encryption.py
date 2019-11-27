@@ -2,28 +2,29 @@
 # Class to utilize the cryptography library and produce encrypted values
 # Authors: Akansh Divker
 
-from hashlib import md5
-from base64 import b64encode
-from base64 import b64decode
-
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
-from Crypto.Util.Padding import pad, unpad
+import string
+import random
+from Crypto.Hash import SHA256
 
 
 class Encryption:
-    def __init__(self, key: str):
-        self.key = md5(key.encode('utf-8')).digest()
+    def __init__(self):
+        letters = string.ascii_lowercase
+        key = ''.join(random.choice(letters) for i in range(16))
 
-    def create_temp_file(self, plaintext: str):
-        f = open('temp_str.txt', 'w+')
-        f.write(plaintext)
-        f.close()
+        hash_object = SHA256.new(data=key.encode('utf-8'))
+        self.key = hash_object.hexdigest()
 
-    def encrypt(self, plaintext: str) -> bytes:
-        iv = get_random_bytes(AES.block_size)
-        cipher = AES.new(self.key, AES.MODE_CBC, iv)
-        return b64encode(iv + cipher.encrypt(pad(plaintext.encode('utf-8'), AES.block_size)))
+    def encrypt(self, plaintext: str) -> str:
+        ciphertext = ""
+
+        for i in range(len(plaintext)):
+            current = plaintext[i]
+            current_key = self.key[i%len(self.key)]
+            ciphertext += chr(ord(current) ^ ord(current_key))
+
+        return ciphertext
+
 
     def to_byte_string(self, convert) -> str:
         return ''.join(['\\'+hex(b)[1:] for b in convert])
